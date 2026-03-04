@@ -3,294 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SKVector — Sovereign Vector Search</title>
-    <meta name="description" content="Semantic search at sovereign speed. Vector embedding and similarity search for AI agents powering semantic memory and RAG pipelines.">
-    <!-- Open Graph -->
-    <meta property="og:title" content="SKVector — Sovereign Vector Search">
-    <meta property="og:description" content="Semantic search at sovereign speed. Vector embedding and similarity search for AI agents powering semantic memory and RAG pipelines.">
+    <title>SKVector -- Semantic Search. Sovereign Speed.</title>
+    <meta name="description" content="Vector embedding and similarity search. Qdrant backend, local-first embeddings, RAG pipeline support.">
+    <link rel="canonical" href="https://skvector.io">
+    <meta property="og:title" content="SKVector -- Semantic Search. Sovereign Speed.">
+    <meta property="og:description" content="Vector embedding and similarity search. Qdrant backend, local-first embeddings, RAG pipeline support.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://skvector.io">
     <meta property="og:site_name" content="SKWorld">
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SKVector — Sovereign Vector Search">
-    <meta name="twitter:description" content="Semantic search at sovereign speed. Vector embedding and similarity search for AI agents powering semantic memory and RAG pipelines.">
-    <!-- Favicon & Canonical -->
+    <meta name="twitter:title" content="SKVector -- Semantic Search. Sovereign Speed.">
+    <meta name="twitter:description" content="Vector embedding and similarity search. Qdrant backend, local-first embeddings, RAG pipeline support.">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%94%8D</text></svg>">
-    <link rel="canonical" href="https://skvector.io">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #e8e8f0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #09090b;
+        color: #fafafa;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* ── Nav ─────────────────────────────────── */
+      .nav {
+        border-bottom: 1px solid #27272a;
+        background: #09090b;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .nav-inner {
+        max-width: 72rem;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 4rem;
+        padding: 0 1rem;
+      }
+      .nav-logo {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #fafafa;
+        text-decoration: none;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      .nav-link {
+        font-size: 0.875rem;
+        color: #a1a1aa;
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .nav-link:hover {
+        color: #fafafa;
+      }
+
+      /* ── Hero ────────────────────────────────── */
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 5rem 1rem 3rem;
+      }
+      .hero-icon {
+        color: #34d399;
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+      }
+      .hero h1 {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+      }
+      .hero .tagline {
+        font-size: 1.25rem;
+        color: #a1a1aa;
+        max-width: 40rem;
+        margin-bottom: 2rem;
+      }
+      .hero .cta-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      /* ── Buttons ─────────────────────────────── */
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        background: #059669;
+        color: #fafafa;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        transition: background 0.15s;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary:hover {
+        background: #047857;
+      }
+      .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        background: transparent;
+        color: #fafafa;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        border: 1px solid #3f3f46;
+        text-decoration: none;
+        transition: border-color 0.15s, color 0.15s;
+        cursor: pointer;
+      }
+      .btn-outline:hover {
+        border-color: #a1a1aa;
+      }
+
+      /* ── Description ─────────────────────────── */
+      .desc-section {
+        max-width: 48rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 3rem;
+        text-align: center;
+      }
+      .desc-section p {
+        font-size: 1.125rem;
+        color: #a1a1aa;
+        line-height: 1.7;
+      }
+
+      /* ── Features ────────────────────────────── */
+      .features-section {
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      .features-section h2 {
+        text-align: center;
+        font-size: 1.875rem;
+        font-weight: 700;
+        margin-bottom: 2.5rem;
+        color: #fafafa;
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+      }
+      .feature-card {
+        border: 1px solid #27272a;
+        background: rgba(24,24,27,0.5);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        transition: border-color 0.2s, transform 0.2s;
+        position: relative;
+      }
+      .feature-card:hover {
+        border-color: #34d399;
+        transform: translateY(-2px);
+      }
+      .feature-dot {
+        width: 8px;
+        height: 8px;
+        background: #34d399;
+        border-radius: 50%;
+        margin-bottom: 0.75rem;
+      }
+      .feature-card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #34d399;
+      }
+
+      /* ── Install ─────────────────────────────── */
+      .install-section {
+        max-width: 40rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+        text-align: center;
+      }
+      .install-section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #fafafa;
+      }
+      .code-block {
+        background: #18181b;
+        border: 1px solid #27272a;
+        border-radius: 0.5rem;
+        padding: 1rem 1.25rem;
+        font-family: 'Geist Mono', ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+        font-size: 0.95rem;
+        color: #34d399;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+      }
+      .code-prompt {
+        color: #a1a1aa;
+        user-select: none;
+      }
+      .copy-btn {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #27272a;
+        border: 1px solid #3f3f46;
+        color: #a1a1aa;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.375rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: color 0.15s, border-color 0.15s;
+        font-family: 'Geist', system-ui, sans-serif;
+      }
+      .copy-btn:hover {
+        color: #fafafa;
+        border-color: #a1a1aa;
+      }
+
+      /* ── DID Banner ──────────────────────────── */
+      .did-banner {
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 0 1rem 3rem;
+      }
+      .did-banner-inner {
+        border: 1px solid rgba(5,150,105,0.3);
+        background: rgba(6,78,59,0.15);
+        border-radius: 0.75rem;
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .did-banner-inner .did-icon {
+        color: #34d399;
+        flex-shrink: 0;
+      }
+      .did-banner-inner .did-icon svg {
+        width: 32px;
+        height: 32px;
+      }
+      .did-banner-inner h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #34d399;
+        margin-bottom: 0.25rem;
+      }
+      .did-banner-inner p {
+        font-size: 0.875rem;
+        color: #a1a1aa;
+      }
+      .did-banner-inner .btn-primary {
+        margin-left: auto;
+        white-space: nowrap;
+      }
+
+      /* ── Architect Banner ────────────────────── */
+      .architect-banner {
+        border-top: 1px solid #27272a;
+        text-align: center;
+        padding: 1.5rem 1rem;
+      }
+      .architect-banner p {
+        font-size: 0.95rem;
+        color: #a1a1aa;
+      }
+      .architect-banner a {
+        color: #34d399;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .architect-banner a:hover {
+        text-decoration: underline;
+      }
+
+      /* ── Footer ──────────────────────────────── */
+      .footer {
+        border-top: 1px solid #27272a;
+        background: #09090b;
+        padding: 2rem 1rem;
+        text-align: center;
+      }
+      .footer p {
+        font-size: 0.875rem;
+        color: #71717a;
+      }
+      .footer .motto {
+        margin-top: 0.5rem;
+        color: #52525b;
+      }
+
+      /* ── Mobile ──────────────────────────────── */
+      @media (max-width: 768px) {
+        .features-grid {
+          grid-template-columns: 1fr;
         }
-        /* Background glows */
-        .bg-glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            filter: blur(150px);
-            opacity: 0.12;
-            z-index: 0;
-            pointer-events: none;
+        .nav-links {
+          gap: 1rem;
         }
-        .glow-1 { background: #ff9100; top: -200px; left: -100px; }
-        .glow-2 { background: #ffd700; bottom: -200px; right: -100px; }
-        .glow-3 { background: #ff9100; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.06; }
-        /* Sticky nav */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 0.75rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .did-banner-inner {
+          flex-direction: column;
+          text-align: center;
         }
-        nav .brand {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #e8e8f0;
-            text-decoration: none;
+        .did-banner-inner .btn-primary {
+          margin-left: 0;
         }
-        nav .brand span {
-            background: linear-gradient(135deg, #ff9100, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .hero .cta-row {
+          flex-direction: column;
+          width: 100%;
+          padding: 0 1rem;
         }
-        nav .links a {
-            color: #a0a0b8;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-left: 1.5rem;
-            transition: color 0.2s;
+        .hero .cta-row a {
+          width: 100%;
+          justify-content: center;
         }
-        nav .links a:hover { color: #ff9100; }
-        /* Main content */
-        main {
-            position: relative;
-            z-index: 1;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 4rem 2rem 2rem;
+      }
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .features-grid {
+          grid-template-columns: repeat(2, 1fr);
         }
-        .badge {
-            display: inline-block;
-            padding: 0.4rem 1rem;
-            background: rgba(255, 145, 0, 0.1);
-            border: 1px solid rgba(255, 145, 0, 0.25);
-            border-radius: 50px;
-            font-size: 0.8rem;
-            color: #ff9100;
-            margin-bottom: 2rem;
-        }
-        .logo { font-size: 4rem; margin-bottom: 0.5rem; }
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ff9100, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-        }
-        .tagline {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #c8c8e0;
-            margin-bottom: 0.75rem;
-        }
-        .subtitle {
-            font-size: 1.15rem;
-            color: #a0a0b8;
-            margin-bottom: 2rem;
-            line-height: 1.7;
-            max-width: 650px;
-        }
-        /* Feature cards */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin: 3rem 0;
-            max-width: 900px;
-            width: 100%;
-        }
-        .feature {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            text-align: left;
-        }
-        .feature:hover {
-            border-color: rgba(255, 145, 0, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(255, 145, 0, 0.08);
-        }
-        .feature-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-        .feature h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #c8c8e0; }
-        .feature p { font-size: 0.85rem; color: #808098; line-height: 1.5; }
-        /* CTA */
-        .cta {
-            display: inline-block;
-            margin-top: 2rem;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #ff9100, #ffd700);
-            color: #0a0a0a;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-        .cta:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 145, 0, 0.3); }
-        /* Tech stack */
-        .stack {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #606078;
-        }
-        .stack span {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 6px;
-            margin: 0.25rem;
-            font-size: 0.8rem;
-        }
-        /* Ecosystem footer */
-        footer {
-            position: relative;
-            z-index: 1;
-            margin-top: 4rem;
-            padding: 2rem;
-            text-align: center;
-            color: #505068;
-            font-size: 0.85rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .eco-links { margin-bottom: 1rem; }
-        .eco-links a {
-            color: #87CEEB;
-            text-decoration: none;
-            margin: 0 0.8rem;
-            white-space: nowrap;
-        }
-        .eco-links a:hover { color: #ff9100; }
-        footer p a { color: #ff9100; text-decoration: none; }
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            .tagline { font-size: 1.2rem; }
-            .subtitle { font-size: 1rem; }
-            .features { grid-template-columns: 1fr; gap: 1rem; }
-            nav { padding: 0.75rem 1rem; }
-            nav .links a { margin-left: 0.75rem; font-size: 0.8rem; }
-            main { padding: 3rem 1.25rem 1rem; }
-        }
+      }
     </style>
 </head>
 <body>
-    <div class="bg-glow glow-1"></div>
-    <div class="bg-glow glow-2"></div>
-    <div class="bg-glow glow-3"></div>
-
-    <nav>
-        <a href="https://skvector.io" class="brand"><span>SK</span>Vector</a>
-        <div class="links">
-            <a href="https://skcapstone.io">SKCapstone</a>
-            <a href="https://skworld.io">SKWorld</a>
-            <a href="https://github.com/smilinTux/skvector">GitHub</a>
+    <!-- Nav -->
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="https://skvector.io" class="nav-logo">SK<span style="color:#34d399">Vector</span></a>
+        <div class="nav-links">
+            <a href="https://skworld.io" class="nav-link">SKWorld</a>
+            <a href="https://skarchitect.io" class="nav-link">SKArchitect</a>
+            <a href="https://github.com/smilinTux/skvector" class="nav-link" target="_blank" rel="noopener">GitHub</a>
         </div>
+      </div>
     </nav>
 
-    <main>
-        <div class="badge">Coming Soon -- Building in Public</div>
-        <div class="logo">&#x1F50D;</div>
-        <h1>SKVector</h1>
-        <p class="tagline">Semantic Search. Sovereign Speed.</p>
-        <p class="subtitle">
-            Vector embedding and similarity search for sovereign AI agents.<br>
-            Powers semantic memory retrieval and RAG pipelines.<br>
-            Local-first embeddings. No data leaves your perimeter.
-        </p>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+      <h1>SK<span style="color:#34d399">Vector</span></h1>
+      <p class="tagline">Semantic Search. Sovereign Speed.</p>
+      <div class="cta-row">
+          <a href="#install" class="btn-primary">Get Started</a>
+          <a href="https://github.com/smilinTux/skvector" class="btn-outline" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </section>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">&#x1F4E6;</div>
-                <h3>Qdrant Backend</h3>
-                <p>Built on Qdrant for production-grade vector storage. Handles millions of embeddings with sub-millisecond search.</p>
+    <!-- Description -->
+    <section class="desc-section">
+      <p>Vector embedding and similarity search. Qdrant backend, local-first embeddings, RAG pipeline support.</p>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section" id="features">
+      <h2>Features</h2>
+      <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-dot"></div>
+              <h3>Qdrant Backend</h3>
             </div>
-            <div class="feature">
-                <div class="feature-icon">&#x1F9EC;</div>
-                <h3>Embedding Generation</h3>
-                <p>Generate vector embeddings locally from text, code, and documents. No API calls to external services.</p>
+            <div class="feature-card">
+              <div class="feature-dot"></div>
+              <h3>Local Embeddings</h3>
             </div>
-            <div class="feature">
-                <div class="feature-icon">&#x1F3AF;</div>
-                <h3>Similarity Search</h3>
-                <p>Find semantically related content instantly. Go beyond keyword matching to true meaning-based retrieval.</p>
+            <div class="feature-card">
+              <div class="feature-dot"></div>
+              <h3>Similarity Search</h3>
             </div>
-            <div class="feature">
-                <div class="feature-icon">&#x1F504;</div>
-                <h3>RAG Pipeline Support</h3>
-                <p>First-class support for Retrieval-Augmented Generation. Ground your AI responses in your own sovereign data.</p>
+            <div class="feature-card">
+              <div class="feature-dot"></div>
+              <h3>RAG Pipeline Support</h3>
             </div>
-            <div class="feature">
-                <div class="feature-icon">&#x1F9E0;</div>
-                <h3>Integrates with SKMemory</h3>
-                <p>Seamless bridge to the SKMemory layer. Memories gain semantic search. Recall by meaning, not just keywords.</p>
+            <div class="feature-card">
+              <div class="feature-dot"></div>
+              <h3>SKMemory Integration</h3>
             </div>
-            <div class="feature">
-                <div class="feature-icon">&#x1F4BB;</div>
-                <h3>Local-First Embeddings</h3>
-                <p>All embedding computation runs on your hardware. No data exfiltration. True sovereign vector intelligence.</p>
+            <div class="feature-card">
+              <div class="feature-dot"></div>
+              <h3>Sovereign Speed</h3>
             </div>
+      </div>
+    </section>
+
+      <section class="install-section">
+        <h2>Get Started</h2>
+        <div class="code-block">
+          <span class="code-prompt">$</span> pip install skvector
+          <button class="copy-btn" onclick="navigator.clipboard.writeText('pip install skvector');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)">Copy</button>
         </div>
+      </section>
 
-        <a href="https://github.com/smilinTux/skvector" class="cta">View on GitHub &#x2192;</a>
-
-        <div class="stack">
-            <span>Qdrant</span>
-            <span>Embeddings</span>
-            <span>RAG</span>
-            <span>SKMemory</span>
-            <span>SKCapstone</span>
-            <span>Python</span>
-            <span>GPL-3.0</span>
-        </div>
-    </main>
-
-    <footer>
-        <div class="eco-links">
-            <a href="https://skcapstone.io">&#x1F3DB;&#xFE0F; SKCapstone</a>
-            <a href="https://capauth.io">&#x1F510; CapAuth</a>
-            <a href="https://skchat.io">&#x1F4AC; SKChat</a>
-            <a href="https://skcomm.io">&#x1F4E1; SKComm</a>
-            <a href="https://skmemory.io">&#x1F9E0; SKMemory</a>
-            <a href="https://skdata.io">&#x1F5C4;&#xFE0F; SKData</a>
-            <a href="https://skgraph.io">&#x1F578;&#xFE0F; SKGraph</a>
-            <a href="https://sksecurity.io">&#x1F6E1;&#xFE0F; SKSecurity</a>
-            <a href="https://skworld.io">&#x1F30D; SKWorld</a>
-        </div>
-        <p>&copy; 2026 <a href="https://github.com/smilinTux">smilinTux</a> &middot; GPL-3.0 License</p>
-        <p style="margin-top: 0.5rem; color: #404058;">Sovereign search for sovereign agents &#x1F427;</p>
+      <section class="architect-banner">
+        <p>Shape the future &rarr; <a href="https://skarchitect.io">Submit proposals and vote at skarchitect.io</a></p>
+      </section>
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Part of the <a href="https://skworld.io" style="color:#34d399;text-decoration:none">SKWorld</a> sovereign ecosystem</p>
+      <p class="motto">staycuriousANDkeepsmilin</p>
     </footer>
 </body>
 </html>
