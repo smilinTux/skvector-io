@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture — SKVector Docs</title>
+    <meta name="description" content="Architecture documentation for SKVector">
+    <link rel="canonical" href="https://skvector.io/docs/architecture/">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-deep: #0f172a; --bg-card: #1e293b; --bg-code: #0d1117;
+            --border: #334155; --text: #e2e8f0; --text-dim: #94a3b8;
+            --accent: #14b8a6; --accent-glow: #2dd4bf;
+            --font-body: 'Inter', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body { font-family: var(--font-body); background: var(--bg-deep); color: var(--text); line-height: 1.7; }
+        a { color: var(--accent-glow); text-decoration: none; }
+        a:hover { color: var(--text); }
+        .nav { position: sticky; top: 0; z-index: 100; background: rgba(15,23,42,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+        .nav-inner { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { font-size: 1.4rem; font-weight: 800; color: var(--text); text-decoration: none; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { list-style: none; display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { color: var(--text-dim); font-size: .9rem; font-weight: 500; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent-glow); }
+        .layout { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 220px 1fr; gap: 3rem; padding: 2rem; }
+        .sidebar { position: sticky; top: 80px; align-self: start; }
+        .sidebar ul { list-style: none; }
+        .sidebar li { margin-bottom: .5rem; }
+        .sidebar a { color: var(--text-dim); font-size: .9rem; display: block; padding: .4rem .8rem; border-radius: 6px; }
+        .sidebar a:hover, .sidebar a.active { color: var(--accent-glow); background: rgba(59,130,246,.1); }
+        .content { min-width: 0; }
+        .content h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1.5rem; }
+        .content h2 { font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .content h3 { font-size: 1.2rem; font-weight: 600; margin: 1.5rem 0 .75rem; }
+        .content h4 { font-size: 1rem; font-weight: 600; margin: 1rem 0 .5rem; }
+        .content p { margin-bottom: 1rem; color: var(--text); }
+        .content ul, .content ol { margin: 0 0 1rem 1.5rem; }
+        .content li { margin-bottom: .4rem; }
+        .content pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
+        .content code { font-family: var(--font-mono); font-size: .85rem; }
+        .content p code, .content li code { background: var(--bg-code); padding: .15rem .4rem; border-radius: 4px; font-size: .85rem; }
+        .content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+        .content strong { color: var(--text); font-weight: 600; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .content table { border-collapse: collapse; width: 100%; }
+        .content td { padding: .5rem .75rem; border: 1px solid var(--border); font-size: .9rem; }
+        .content tr:nth-child(odd) { background: rgba(30,41,59,.5); }
+        .footer { text-align: center; padding: 3rem 2rem; color: var(--text-dim); font-size: .85rem; border-top: 1px solid var(--border); margin-top: 4rem; }
+        @media (max-width: 768px) {
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">SK<span>Vector</span></a>
+    <ul class="nav-links">
+      <li><a href="/docs/">Docs</a></li>
+      <li><a href="https://github.com/smilinTux/skvector">GitHub →</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="layout">
+    <aside class="sidebar">
+        <ul>
+            <li><a href="/docs/getting-started/" >Getting Started</a></li><li><a href="/docs/architecture/" class="active">Architecture</a></li>
+        </ul>
+    </aside>
+    <main class="content">
+        <h1>SKVector Architecture</h1>
+<h2>Vector Pipeline</h2>
+<pre><code class="language-">
+Text Input → Embedding Model → Vector (384/1536 dims) → Qdrant Collection → Search Results
+</code></pre>
+<h2>Components</h2>
+<h3>Embedding Layer</h3>
+<p>Converts text into dense vector representations:</p>
+<ul>
+<li><strong>Default:</strong> sentence-transformers <code>all-MiniLM-L6-v2</code> (384 dimensions)</li>
+<li><strong>High quality:</strong> OpenAI <code>text-embedding-3-small</code> (1536 dimensions)</li>
+<li><strong>Local/private:</strong> Ollama with any embedding model</li>
+</ul>
+<h3>Storage Layer (Qdrant)</h3>
+<ul>
+<li><strong>Collections</strong> — Organized by memory tier (short/mid/long) or custom</li>
+<li><strong>Payload filtering</strong> — Combine vector similarity with metadata filters</li>
+<li><strong>Quantization</strong> — Reduce memory usage for large collections</li>
+<li><strong>Persistence</strong> — WAL-based durability</li>
+</ul>
+<h3>Search Layer</h3>
+<p>Hybrid search combining:</p>
+<p>1. <strong>Vector similarity</strong> — cosine distance in embedding space</p>
+<p>2. <strong>Payload filters</strong> — date ranges, tags, importance thresholds</p>
+<p>3. <strong>Re-ranking</strong> — optional cross-encoder re-ranking for precision</p>
+<h2>Indexing Strategy</h2>
+<h3>Automatic Indexing</h3>
+<p>When integrated with SKMemory, every snapshot is automatically:</p>
+<p>1. Embedded using the configured model</p>
+<p>2. Stored in the appropriate Qdrant collection</p>
+<p>3. Tagged with metadata (emotions, importance, quadrant)</p>
+<h3>Batch Indexing</h3>
+<p>For importing existing memories:</p>
+<pre><code class="language-python">
+from skvector import VectorStore
+
+vs = VectorStore(url="http://localhost:6333")
+vs.batch_index(memories, batch_size=100)
+</code></pre>
+<h2>Performance</h2>
+<ul>
+<li><strong>Indexing:</strong> ~1000 memories/second (local embeddings)</li>
+<li><strong>Search:</strong> < 10ms for collections under 1M vectors</li>
+<li><strong>Memory:</strong> ~1KB per vector (384 dims, float32)</li>
+</ul>
+    </main>
+</div>
+<footer class="footer">
+    <p>SKVector is part of the <a href="https://skworld.io">SKWorld</a> sovereign AI ecosystem · <a href="https://github.com/smilinTux/skvector">GPL-3.0</a></p>
+</footer>
+</body>
+</html>
