@@ -318,6 +318,70 @@
         color: #52525b;
       }
 
+      /* ── Own the Full Vertical ───────────────── */
+      .vertical-section {
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 0 1rem 3rem;
+      }
+      .vertical-inner {
+        border: 1px solid rgba(5,150,105,0.35);
+        background: rgba(6,78,59,0.1);
+        border-radius: 0.75rem;
+        padding: 2rem 2.5rem;
+      }
+      .vertical-inner h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #34d399;
+        margin-bottom: 0.75rem;
+      }
+      .vertical-inner p {
+        font-size: 0.95rem;
+        color: #a1a1aa;
+        line-height: 1.7;
+        margin-bottom: 0.75rem;
+      }
+      .vertical-inner .sovereignty-line {
+        font-size: 0.9rem;
+        color: rgba(52,211,153,0.8);
+        font-style: italic;
+        border-left: 3px solid rgba(52,211,153,0.35);
+        padding-left: 1rem;
+        margin: 0.75rem 0;
+      }
+      .vertical-layers {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin: 0.75rem 0;
+      }
+      .layer-badge {
+        padding: 0.2rem 0.65rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        background: rgba(255,255,255,0.04);
+        color: rgba(255,255,255,0.35);
+        border: 1px solid rgba(255,255,255,0.07);
+      }
+      .layer-badge.active {
+        background: rgba(52,211,153,0.12);
+        color: #34d399;
+        border-color: rgba(52,211,153,0.4);
+        font-weight: 600;
+      }
+      .vertical-inner .vertical-link {
+        display: inline-block;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        color: #34d399;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .vertical-inner .vertical-link:hover {
+        text-decoration: underline;
+      }
+
       /* ── Mobile ──────────────────────────────── */
       @media (max-width: 768px) {
         .features-grid {
@@ -412,6 +476,7 @@
       <div class="hero-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
       <h1>SK<span style="color:#34d399">Vector</span></h1>
       <p class="tagline">Semantic Search. Sovereign Speed.</p>
+      <p style="font-size:0.875rem;color:rgba(52,211,153,0.65);margin-bottom:0.5rem;letter-spacing:0.01em;">Search that never leaves home. Your vectors, your hardware, zero cloud dependency.</p>
       <div class="cta-row">
           <a href="#install" class="btn-primary">Get Started</a>
           <a href="https://github.com/smilinTux/skvector" class="btn-outline" target="_blank" rel="noopener">View on GitHub</a>
@@ -459,6 +524,27 @@
         <div class="code-block">
           <span class="code-prompt">$</span> pip install skvector
           <button class="copy-btn" onclick="navigator.clipboard.writeText('pip install skvector');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)">Copy</button>
+        </div>
+      </section>
+
+      <!-- Own the Full Vertical -->
+      <section class="vertical-section" id="vertical">
+        <div class="vertical-inner">
+          <h2>&#x1F427; Own the Full Vertical</h2>
+          <p>The modern stack is rented — your searches leave, your embeddings are stored somewhere else, your inference phones home. We rebuilt it from the ground up. <strong style="color:#fafafa;">SKVector is your Data / Semantic layer</strong>: vector search and embeddings that run on your hardware, answer your queries, and never leave your network.</p>
+          <div class="sovereignty-line">Your data never leaves your hardware. Your keys, your disk, your rules.</div>
+          <div class="vertical-layers">
+            <span class="layer-badge">Soul</span>
+            <span class="layer-badge">Apps</span>
+            <span class="layer-badge">Comms</span>
+            <span class="layer-badge">Models</span>
+            <span class="layer-badge active">&#x25B6; Data / Semantic — you are here</span>
+            <span class="layer-badge">Identity</span>
+            <span class="layer-badge">Security</span>
+            <span class="layer-badge">OS</span>
+            <span class="layer-badge">Silicon</span>
+          </div>
+          <a href="https://skworld.io" class="vertical-link">See the whole vertical at skworld.io &#x2192;</a>
         </div>
       </section>
 
